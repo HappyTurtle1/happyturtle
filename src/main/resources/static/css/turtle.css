@@ -1,0 +1,97 @@
+@charset "utf-8";
+.k{border: 0.0625em solid #f00}
+
+body{
+    font-size: 16px;color: #02002D;word-wrap: break-word; font-family: -apple-system,'Helvetica Neue', Helvetica, Arial, 'PingFang SC','Microsoft YaHei',sans-serif
+}
+
+a{ text-decoration:none;}
+
+.normal-ml{ margin-left:0em !important;}
+.normal-mr{ margin-right:0em !important;}
+
+.htp-sm{ width:100%; height:0.625em; overflow:hidden;}
+.htp-m{ width:100%; height:1.25em; overflow:hidden;}
+.htp{ width:100%; height:1.875em; overflow:hidden;}
+.htp-l{ width:100%; height:2.5em; overflow:hidden;}
+.htp-ml{ width:100%; height:3.125em; overflow:hidden;}
+.htp-xl{ width:100%; height:3.75em; overflow:hidden;}
+
+.fz-gray{ color:#5c5c5c !important;}
+.fz-red{ color:#ff0000 !important;}
+.fz-hl{color:#6A16A4 !important;}
+.fz-12{font-size: 0.75em !important;}
+.fz-14{font-size: 0.875em !important;}
+.fz-18{font-size: 1.125em !important;}
+.fz-20{font-size: 1.25em !important;}
+.text-left{ text-align:left !important;}
+.text-right{text-align:right !important;}
+.fl-right{ float:right !important;}
+
+.dis-none{ display:none;}
+.dis-block{ display:block}
+.hover{ cursor:pointer;}
+
+/*网页头部*/
+.header{width:1030px; margin: 0 auto; overflow:hidden;text-align: center;border-bottom: 1px solid #C4CCE2;}
+.header-logo{display:block; float:left; height:60px; margin-top:20px;}
+.header-user{display:block; float:right; height:100px; line-height:100px;}
+.header-user img{display:block; float:left;margin-top: 40px;width: 20px;height: 20px;}
+.header-user div{display:block; float:left;height:100px; line-height:100px; display:inline-block; margin-left:5px;}
+.header-user div a{display:block; float:left;text-decoration:none; color:#5A5877; font-size:12px;cursor: pointer;}
+.header-user div a:hover{color:#6A16A4;}
+
+
+
+/*选项卡*/
+.tab{overflow:hidden;}
+.tab .tab-items{width:64.375em;margin: 0 auto;overflow:hidden;}
+.tab .tab-items .tab-item{float:left; display:inline-block; width:5.625em; height:4.375em; line-height:4.375em; margin-left:1.25em; cursor:pointer; text-align:center;  cursor:pointer}
+.tab .tab-items .tab-item label{cursor:pointer}
+.tab .tab-items .tab-item label a{color:#5A5877;width:6em; height:4.375em;display: inline-block;font-size: 14px;}
+.tab .tab-items .tab-item .tilte{font-size: 0.875em;float:left; display:inline-block; overflow:hidden; margin-left:0.5em;cursor:pointer}
+.tab .tab-items .tab-item .super{font-size: 0.875em;color:#6A16A4;float:left; display:inline-block; overflow:hidden;height:1em; line-height:1em; margin-top:1.428em; margin-left:0.35em;cursor:pointer}
+.tab .tab-items .tab-open{ border-bottom:0.2em solid #FFBB4B !important;}
+.tab .tab-content{width:100%; min-height:14em;overflow:hidden;border-top:0.0625em solid #C4CCE2; }
+.tab .tab-content .tab-content-inner{width:64.375em;margin: 0 auto;overflow:hidden;}
+
+
+a.btn{display:block;letter-spacing:0.1em; text-align:center;border-radius:0.1875em; text-decoration:none; color:#082E84; background-color:#FFBB4B;height:2.5em;line-height:2.5em;width:18.75em;border:solid 1px #FFBB4B;cursor: pointer;}
+a.btn label{ cursor:pointer}
+a.btn span{ cursor:pointer}
+a.btn:hover {background-color:#FEA40F}
+
+.btn-sec{display:inline-block;letter-spacing:0.1em; text-align:center;border-radius:0.1875em; text-decoration:none; color:#6A16A4; background-color:#FFF;height:2.5em;line-height:2.5em;width:18.75em; border:solid 1px #6A16A4}
+
+.btn-l{height:3.75em !important;line-height:3.75em !important; width:17.5em !important; border-radius:0.2em !important;}
+
+/*单选按钮(通用)*/
+.radio-btn{ display:inline-block;overflow:hidden;cursor:pointer}
+.radio-btn .ico-radio-btn{float:left;display:inline-block;width:1em;height:1em;background-image:url(../img/ico_radio_btn.png);background-size: 100% 100%;background-repeat:no-repeat; background-position:0px 0px;cursor:pointer}
+.radio-btn .radio-btn-txt{ float:left;display:inline-block; width:auto; height:1em; line-height:1em; margin-left:0.5em;}
+.radio-btn .ico-radio-btn-on{background-image:url(../img/ico_radio_btn_on.png);}
+
+/*对话框组件*/
+.dialog-mask{position:absolute;top:0px;left:0px;background:#000;overflow:hidden;z-index:99;filter:alpha(opacity=40);opacity: 0.4; display:none;}
+.dialog{position:absolute;background-color:#FFF;z-index:999; width:40em;overflow:hidden;display:none;}
+.dialog-close{cursor:pointer; position:absolute; top:1.25em; right:1.25em;width:1.0625em;height:1.0625em;}
+.dialog .dialog-title{ font-size:1.25em; text-align:center; width:100%; overflow:hidden;}
+.dialog .dialog-field{width:34em; height:auto; margin:0 auto;overflow:hidden;}
+.dialog .dialog-field div{display:block;height:2.75em; line-height:3.5em; overflow:hidden;}
+.dialog .dialog-field input{font-size: 0.875em; width:38.57em; height:2.5em; outline:none; border:1px solid #C4CCE2}
+.dialog .dialog-field span{font-size: 0.875em;color:#5A5877;}
+.dialog .dialog-field .dialog-info{font-size: 0.75em; margin-left:0.2em;color:#FF0000}
+.dialog .dialog-field .gnee-tag-txt{ width:15.714em}
+.dialog .dialog-field .gnee-tag-title{margin-left:0.8em;}
+.dialog .dialog-field .gnee-tag-con{ display:inline-block;font-size: 0.75em; height:2.5em; line-height:2.5em; padding-left:0.8em; padding-right:0.8em;border: 1px solid #C4CCE2; cursor:pointer;}
+.dialog .btn{ margin-left:10.625em; margin-top:1.25em}
+.dialog .btn-sec{ margin-left:10.625em; margin-top:1.25em}
+.dialog .btn-sec span{ color:#6A16A4}
+.district-select{display: none;width:165px;height: 40px;border: 1px solid #C4CCE2;border-radius: 5px;font-size: 14px;color: #02002D;}
+
+
+/*登录注册样式*/
+.login-content{width: 500px;margin: 0 auto;border: 1px solid #007ddc;}
+.login-title{border-bottom: solid 1px #cacaca;height: 70px;line-height: 70px;margin: 0 30px;text-align: center;font-size: 1.25em;}
+.login-input{display:block;width: 300px;height: 45px;line-height: 45px;margin: 0 auto;border: 1px solid #aaa;text-indent: 2em;}
+.input-msg{width: 300px;height: 40px;line-height: 40px;margin: 0 auto;color:#F00; overflow:hidden;}

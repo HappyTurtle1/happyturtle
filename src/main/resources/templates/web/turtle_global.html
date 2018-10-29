@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta property="wb:webmaster" content="fa4b4e1bd0267eaf" /><!--微博验证-->
+    <link rel="apple-touch-icon" href="https://www.lequlai.com/static/img/apple-touch-icon.png?v=2017022001" />
+    <link rel="icon"  href="https://www.lequlai.com/static/img/icon.png?v=2017022001"   type="image/png" />
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">快乐永恒</title>
+    <link rel="stylesheet" href="/css/turtle.css?v=03" />
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#show_login").click(function () {
+                window.location.href = "/login";
+            });
+
+            $("#show_reg").click(function () {
+                window.location.href = "/register";
+            });
+        })
+    </script>
+
+</head>
+<body>
+<div class="header">
+    <img src="/img/turtle.jpg" class="header-logo"/>
+    <img src="/img/turtle.jpg" class="header-logo"/>
+    <img src="/img/turtle.jpg" class="header-logo"/>
+    <img src="/img/turtle.jpg" class="header-logo"/>
+    <img src="/img/turtle.jpg" class="header-logo"/>
+
+    <img src="/img/happy_turtle.jpg" style="width: 300px;" class="header-logo"/>
+
+    <img src="/img/turtle.jpg" class="header-logo"/>
+    <img src="/img/turtle.jpg" class="header-logo"/>
+    <img src="/img/turtle.jpg" class="header-logo"/>
+    <img src="/img/turtle.jpg" class="header-logo"/>
+    <img src="/img/turtle.jpg" class="header-logo"/>
+
+    <div class="header-user">
+        <div class=""  th:if="${session.user == null}">
+            <img style="border-radius:50px;margin-right: 5px;width: 20px;height: 20px;" src="https://www.lequlai.com/static/img/lql_header.png"/>
+            <a id="show_login"  target="_blank" style="margin-right: 8px;color: #6A16A4;">登录</a>
+            <span style="float: left;color: #C4CCE2;">|</span><a id="show_reg"  target="_blank" style="margin-left: 8px;">注册</a>
+        </div>
+        <div th:if="${session.user != null}">
+            <img style="border-radius:50px;margin-right: 5px;width: 20px;height: 20px;" src="https://www.lequlai.com/static/img/lql_header_sm.png"/>
+            <a href="/my/orders/all"  target="_blank" th:text="'我的账户('+${session.user.user_name}+')'"></a>
+            <a target="_self" class="" href="/quit.action">&emsp;退出</a>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="content"></div>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{web/turtle_global}">
+<head>
+<title>注册</title>
+<script>
+
+    //验证用户名
+    function checkUserName(name){
+
+        $(name).prev(".input-msg").empty();
+        if($.trim($(name).val()) ==""){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;请填写用户名</label>");
+            return false;
+        }else if($(name).val().length < 3 || $(name).val().length > 10){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;用户名必须在3~10个字符之间</label>");
+            return false;
+        }
+        return true;
+    }
+
+    //验证密码
+    function checkUserLoginPass(name){
+
+        $(name).prev(".input-msg").empty();
+        if($.trim($(name).val()) ==""){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;请填写用户密码</label>");
+            return false;
+        }else if($(name).val().length < 6 || $(name).val().length > 16){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;用户名必须在6~16个字符之间</label>");
+            return false;
+        }else if(!/^[0-9a-zA-Z_]+$/.test($(name).val())){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;请填写6-16位字母、数字、下划线的组合，区分大小写</label>");
+            return false;
+        }
+        return true;
+    }
+
+    //验证真实姓名
+    function checkRealName(name){
+
+        $(name).prev(".input-msg").empty();
+        if($.trim($(name).val()) ==""){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;请填写真实姓名</label>");
+            return false;
+        }else if($(name).val().length < 2 || $(name).val().length > 10){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;请填写正确的真实姓名</label>");
+            return false;
+        }
+        return true;
+    }
+
+    //验证手机号
+    function checkPhone(name){
+
+        $(name).prev(".input-msg").empty();
+        if($.trim($(name).val()) ==""){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;请填写手机号码</label>");
+            return false;
+        }else if(!/^(13|14|15|16|17|18|19)[0-9]{9}$/.test($(name).val())){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;请填写正确的手机号码</label>");
+            return false;
+        }
+        return true;
+    }
+
+    //验证Email
+    function checkEmail(name){
+
+        $(name).prev(".input-msg").empty();
+        if($.trim($(name).val()) ==""){
+            $(name).prev(".input-msg").append("<label class='fz-12'>&nbsp;请填写Email</label>");
+            return false;
+        }
+        return true;
+    }
+
+    $(document).ready(function(){
+        //登录用户名验证
+        $("#userName").focus(function(){
+            $(this).prev(".input-msg").empty();
+        }).blur(function(){
+            checkUserName("#userName");
+        });
+
+        //登录密码验证
+        $("#userPwd").focus(function(){
+            $(this).prev(".input-msg").empty();
+        }).blur(function(){
+            checkUserLoginPass("#userPwd");
+        });
+
+        //真实姓名验证
+        $("#realName").focus(function(){
+            $(this).prev(".input-msg").empty();
+        }).blur(function(){
+            checkRealName("#realName");
+        });
+
+        //手机号验证
+        $("#phone").focus(function(){
+            $(this).prev(".input-msg").empty();
+        }).blur(function(){
+            checkPhone("#phone");
+        });
+
+        //Email验证
+        $("#email").focus(function(){
+            $(this).prev(".input-msg").empty();
+        }).blur(function(){
+            checkEmail("#email");
+        });
+
+        //注册提交
+        $(".btn").click(function () {
+            if(checkUserName("#userName") & checkUserLoginPass("#userPwd") & checkRealName("#realName")
+                & checkPhone("#phone") & checkEmail("#email")){
+
+                var userName = $("#userName").val();
+                var userPwd = $("#userPwd").val();
+                var realName = $("#realName").val();
+                var phone = $("#phone").val();
+                var email = $("#email").val();
+
+                var url = "/register";
+                var params = {userName:userName,userPwd:userPwd,realName:realName,phone:phone,email:email,msgCode:"1234"};
+                jQuery.post(url, params,
+                    function (result) {
+                        if(result.code == 0){
+                            window.location.href="/";
+                        }
+                        if(result.code == 1){
+                            $("#userName").prev(".input-msg").empty();
+                            $("#userName").prev(".input-msg").append("<label style='color:#F00;' class='fz-12'>&nbsp;"+result.message+"</label>");
+                        }
+                    },'json');
+            }
+        });
+
+    })
+
+
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="htp-xl"></div>
+    <div class="login-content">
+        <div class="login-title">用户注册</div>
+        <div class="input-msg"></div>
+        <input type="text" name="userName" id="userName" placeholder="请输入用户名" class="login-input">
+        <div class="input-msg"></div>
+        <input type="text" name="realName" id="realName" placeholder="请输入真实姓名" class="login-input">
+        <div class="input-msg"></div>
+        <input type="password" name="userPwd" id="userPwd" placeholder="请输入密码" class="login-input">
+        <div class="input-msg"></div>
+        <input type="text" name="phone" id="phone" placeholder="请输入手机号" class="login-input">
+        <div class="input-msg"></div>
+        <input type="text" name="email" id="email" placeholder="请输入Email" class="login-input">
+        <div class="htp-l"></div>
+        <a class="btn" style="margin: 0 auto">立即注册</a>
+        <div class="htp-l"></div>
+    </div>
+
+</div>
+</body>
+</html>

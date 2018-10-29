@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{web/turtle_global}">
+<head>
+<title>欢迎光临</title>
+<script>
+    $(document).ready(function(){
+
+       /* $("body").click(function () {
+            if(confirm("龟速前进，敬请期待！")){
+                alert("打赏一发吧，兄弟！");
+            }else {
+                alert("加入我们吧，兄弟！");
+            }
+        });*/
+
+        $(".team-info").each(function(i){
+            if(i != 0){
+                $(this).hide();
+            }
+        })
+        $(".about-info").each(function(i){
+            $(this).mousemove(function(){
+                teamImgShow(i);
+            })
+        })
+    })
+    //展示团队图片信息
+    function teamImgShow(i){
+        $(".dis-none").removeClass("dis-none");
+        $(".about-people-hide").eq(i).addClass("dis-none");
+        $(".team-info").each(function(a){
+            if(a != i){
+                $(this).hide();
+            }else {
+                $(this).show();
+            }
+        })
+    }
+
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div style="width: 100%;text-align: center;height: 200px;line-height: 200px;font-size: 20px;">
+        This is my home!!!<br>
+        更多精彩，敬请期待。。。
+    </div>
+</div>
+</body>
+</html>
