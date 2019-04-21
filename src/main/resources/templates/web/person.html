@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta property="wb:webmaster" content="fa4b4e1bd0267eaf" /><!--微博验证-->
+    <link rel="apple-touch-icon" href="https://www.lequlai.com/static/img/apple-touch-icon.png?v=2017022001" />
+    <link rel="icon"  href="https://www.lequlai.com/static/img/icon.png?v=2017022001"   type="image/png" />
+    <title>承德市招标代理专家抽取系统</title>
+    <style>
+        .htp-sm{ width:100%; height:0.625em; overflow:hidden;}
+        .htp{ width:100%; height:1.875em; overflow:hidden;color:#F00;}
+        .input-msg{color:#F00;line-height:1.875em;}
+        .input-text{width: 400px;height: 28px;line-height: 28px;font-size: 20px;text-indent: 1em;}
+        select{width: 200px;height: 28px;line-height: 28px;}
+        .person-input{width: 100px;height: 23px;line-height: 23px;text-align: center;margin-left: 20px;}
+
+        .result-table{width: 625px;line-height:40px;text-align: center;}
+        .result-table .tr-css{border: 1px solid #D0D0D0;border-bottom: none;}
+        .result-table .tr-css:nth-last-of-type(1) {
+            border-bottom: 1px solid #D0D0D0;
+        }
+        .result-table .tr-css .td-css{display: inline-block;height: 40px;border-right: 1px solid #D0D0D0;}
+        .result-btn{width: 230px;
+            height: 32px;
+            margin: 22px auto 10px;
+            padding-top: 8px;
+            background: #007DDC;
+            border-radius: 3px;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script>
+        //校验项目名称
+        function checkProject(){
+            $("#projectName").parents().prev(".input-msg").empty();
+
+            var projectName = $("#projectName").val();
+            if($.trim(projectName) ==""){
+                $("#projectName").parents().prev(".input-msg").append("<label style='margin-left: 120px;' class='fz-12'>&nbsp;请填写项目名称</label>");
+                return false;
+            }
+            return true;
+        }
+
+        //校验人数
+        function checkPerson(name){
+            $(name).parents().prev(".input-msg").empty();
+
+            if($.trim($(name).val()) ==""){
+                $(name).parents().prev(".input-msg").append("<label style='margin-left: 150px;' class='fz-12'>&nbsp;请输入正确的人数</label>");
+                return false;
+            }else if(!/^[1-9]+[0-9]*]*$/.test($.trim($(name).val()))){
+                $(name).parents().prev(".input-msg").append("<label style='margin-left: 150px;' class='fz-12'>&nbsp;请输入正确格式的人数</label>");
+                return false;
+            }
+            return true;
+        }
+
+
+        $(document).ready(function(){
+            $(".result-btn").click(function () {
+                var major2 = $("#major2").val();
+
+                if(checkProject() && checkPerson("#count1")){
+                    var major1 = $("#major1").val();
+                    var count1 = $("#count1").val();
+                    var url = "/personSelect";
+                    var params = {major1:major1,count1:count1};
+
+                    if(major2 > 0){
+                        var count2 = $("#count2").val();
+                        params = {major1:major1,count1:count1,major2:major2,count2:count2};
+                    }
+
+                    jQuery.post(url, params,
+                        function (result) {
+                            if(result.code == 0){
+                                $(".result-table .tr-css:gt(0)").remove();
+                                var html = "";
+                                for(var i=0;i<result.data.length;i++){
+                                    var person = result.data[i];
+                                    var code = i+1;
+                                    html = html+'<div class="tr-css">'+
+                                                '<div class="td-css" style="width: 100px;">'+code+'</div>'+
+                                                '<div class="td-css" style="width: 120px;">'+person.person_name+'</div>'+
+                                                '<div class="td-css" style="width: 190px;">'+person.major_name+'</div>'+
+                                                '<div class="td-css" style="width: 190px;border-right: none;">'+person.phone+'</div>'+
+                                            '</div>';
+                                }
+                                $("#firstInfo").after(html);
+                            }
+                            if(result.code == 1){
+                                $("#projectName").parents().prev(".input-msg").empty();
+                                $("#projectName").parents().prev(".input-msg").append("<label style='margin-left: 120px;' class='fz-12'>&nbsp;系统错误，请重试</label>");
+                            }
+                        },'json');
+                }
+
+            });
+
+        })
+    </script>
+
+</head>
+<body style="margin: 0;">
+
+    <img src="/img/web-header.png" style="width: 100%"/>
+
+    <div style="width: 800px;margin: 0 auto;">
+        <div class="htp"></div>
+        <div class="htp input-msg"></div>
+        <div style="font-size: 24px;">
+            <span>项目名称：</span>
+            <input type="text" id="projectName" class="input-text" placeholder="请输入项目名称">
+        </div>
+        <div class="htp-sm"></div>
+        <div class="htp input-msg"></div>
+        <div style="font-size: 24px;">
+            <span>拟抽取专业：</span>
+            <select id="major1">
+                <option th:each="major:${majorList}" th:value="${major.id}" th:text="${major.major_name}"></option>
+            </select>
+            <input type="text" id="count1"  class="person-input" placeholder="请输入人数">人
+        </div>
+        <div class="htp input-msg"></div>
+        <div style="font-size: 24px;">
+            <span style="margin-left: 70px;">添加：</span>
+            <select id="major2">
+                <option value="0">无</option>
+                <option th:each="major:${majorList}" th:value="${major.id}" th:text="${major.major_name}"></option>
+            </select>
+            <input type="text" id="count2" class="person-input" placeholder="请输入人数">人
+        </div>
+        <div class="htp-sm"></div>
+        <div class="result-btn">立即抽取</div>
+        <div class="htp"></div>
+        <div style="font-size: 24px;">抽取结果</div>
+        <div class="htp-sm"></div>
+        <div class="result-table">
+            <div class="tr-css" id="firstInfo">
+                <div class="td-css" style="width: 100px;">编号</div>
+                <div class="td-css" style="width: 120px;">姓名</div>
+                <div class="td-css" style="width: 190px;">专业</div>
+                <div class="td-css" style="width: 190px;border-right: none;">电话</div>
+            </div>
+        </div>
+
+        <div class="htp"></div><div class="htp"></div>
+    </div>
+
+</body>
+</html>
