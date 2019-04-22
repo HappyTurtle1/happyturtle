@@ -14,6 +14,7 @@
         .input-text{width: 400px;height: 28px;line-height: 28px;font-size: 20px;text-indent: 1em;}
         select{width: 200px;height: 28px;line-height: 28px;}
         .person-input{width: 100px;height: 23px;line-height: 23px;text-align: center;margin-left: 20px;}
+        .delete-img{width: 25px;margin-left: 20px;vertical-align: middle;cursor: pointer;}
 
         .result-table{width: 625px;line-height:40px;text-align: center;}
         .result-table .tr-css{border: 1px solid #D0D0D0;border-bottom: none;}
@@ -21,6 +22,17 @@
             border-bottom: 1px solid #D0D0D0;
         }
         .result-table .tr-css .td-css{display: inline-block;height: 40px;border-right: 1px solid #D0D0D0;}
+        .add-btn{width: 160px;
+            height: 32px;
+            margin-top: 20px;
+            padding-top: 8px;
+            background: #FFFFFF;
+            border: 1px solid #C4CCE2;
+            border-radius: 3px;
+            color: #02002D;
+            text-align: center;
+            cursor: pointer;
+        }
         .result-btn{width: 230px;
             height: 32px;
             margin: 22px auto 10px;
@@ -34,6 +46,9 @@
     </style>
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script>
+
+        var count = 1;//专业个数
+
         //校验项目名称
         function checkProject(){
             $("#projectName").parents().prev(".input-msg").empty();
@@ -60,24 +75,54 @@
             return true;
         }
 
+        //增加专业
+        function addMajor(){
+            count = count + 1;
+            var optionHtml = $("#major1").html();
+            var majorHtml = '<div class="htp input-msg"></div>'+
+                            '<div style="font-size: 24px;">'+
+                                '<select style="margin-left: 150px;" id="major'+count+'">'+optionHtml+
+                                '</select>'+
+                                '<input type="text" id="count'+count+'" class="person-input" placeholder="请输入人数">&nbsp;人'+
+                                '<img src="/img/delete.jpg" class="delete-img" onclick="deleteMajor('+count+')">'+
+                            '</div>';
+            $(".add-btn").before(majorHtml);
+        }
+
+        //删除专业
+        function deleteMajor(count){
+            $("#major"+count).parent().prev(".input-msg").remove();
+            $("#major"+count).parent().remove();
+        }
 
         $(document).ready(function(){
             $(".result-btn").click(function () {
-                var major2 = $("#major2").val();
 
                 if(checkProject() && checkPerson("#count1")){
                     var major1 = $("#major1").val();
                     var count1 = $("#count1").val();
                     var url = "/personSelect";
-                    var params = {major1:major1,count1:count1};
+                    var params = "{count:"+count+",major1:"+major1+",count1:"+count1;
+                    //var params = {major1:major1,count1:count1};
 
-                    if(major2 > 0){
-                        var count2 = $("#count2").val();
-                        params = {major1:major1,count1:count1,major2:major2,count2:count2};
+                    if(count > 1){
+                        for (var n=2;n<=count;n++){
+                            var majorn = $("#major"+n).val();
+                            var countn = $("#count"+n).val();
+                            if(majorn > 0 && checkPerson("#count"+n)){
+                                params = params+",major"+n+":"+majorn+",count"+n+":"+countn;
+                            }
+                        }
                     }
 
-                    jQuery.post(url, params,
+                    params = params+"}";
+
+                    //转化为数组参数
+                    eval('var param = ' + params);
+
+                    jQuery.post(url, param,
                         function (result) {
+                            $("#resultInfo").html("");
                             if(result.code == 0){
                                 $(".result-table .tr-css:gt(0)").remove();
                                 var html = "";
@@ -92,6 +137,7 @@
                                             '</div>';
                                 }
                                 $("#firstInfo").after(html);
+                                $("#resultInfo").html(result.message);
                             }
                             if(result.code == 1){
                                 $("#projectName").parents().prev(".input-msg").empty();
@@ -124,21 +170,17 @@
             <select id="major1">
                 <option th:each="major:${majorList}" th:value="${major.id}" th:text="${major.major_name}"></option>
             </select>
-            <input type="text" id="count1"  class="person-input" placeholder="请输入人数">人
+            <input type="text" id="count1"  class="person-input" placeholder="请输入人数">&nbsp;人
         </div>
-        <div class="htp input-msg"></div>
-        <div style="font-size: 24px;">
-            <span style="margin-left: 70px;">添加：</span>
-            <select id="major2">
-                <option value="0">无</option>
-                <option th:each="major:${majorList}" th:value="${major.id}" th:text="${major.major_name}"></option>
-            </select>
-            <input type="text" id="count2" class="person-input" placeholder="请输入人数">人
-        </div>
+
+        <div class="add-btn" onclick="addMajor()">+添加</div>
+
         <div class="htp-sm"></div>
         <div class="result-btn">立即抽取</div>
         <div class="htp"></div>
         <div style="font-size: 24px;">抽取结果</div>
+        <div class="htp-sm"></div>
+        <div id="resultInfo" style="color:#F00;line-height: 1em"></div>
         <div class="htp-sm"></div>
         <div class="result-table">
             <div class="tr-css" id="firstInfo">
