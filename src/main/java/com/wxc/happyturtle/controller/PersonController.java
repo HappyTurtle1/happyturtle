@@ -1,10 +1,15 @@
 package com.wxc.happyturtle.controller;
 
+import com.wxc.happyturtle.Constants;
 import com.wxc.happyturtle.api.ApiResponse;
+import com.wxc.happyturtle.entity.LoginUser;
 import com.wxc.happyturtle.entity.Major;
 import com.wxc.happyturtle.entity.Person;
+import com.wxc.happyturtle.entity.UserSession;
+import com.wxc.happyturtle.service.LoginUserService;
 import com.wxc.happyturtle.service.MajorService;
 import com.wxc.happyturtle.service.PersonService;
+import com.wxc.happyturtle.util.IpUtil;
 import com.wxc.happyturtle.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +32,81 @@ public class PersonController {
     private MajorService majorService;
     @Autowired
     private PersonService personService;
+    @Autowired
+    private LoginUserService loginUserService;
 
+    //进入抽取系统登录界面
+    @GetMapping("/person/login")
+    public String toLogin(HttpServletRequest request) {
+
+        UserSession userSession = (UserSession) request.getSession().getAttribute("user");
+
+        if(userSession != null){
+            return "redirect:/personSelect";
+        }
+
+        logger.info(IpUtil.getIpAddr(request)+"访问抽取系统。");
+        return "web/login";
+    }
+
+    //用户登录
+    @PostMapping("/person/login")
+    @ResponseBody
+    public ApiResponse login(HttpServletRequest request) {
+
+        ApiResponse result = new ApiResponse();
+
+        String user_name = StringUtil.parseStringParam(request.getParameter("userName"));
+        String user_pass = StringUtil.parseStringParam(request.getParameter("userPwd"));
+        if(user_name == null || user_pass == null){
+            logger.warn("用户"+user_name+"登录用户名和密码不能为空！");
+            result.setCode(1);
+            result.setMessage("用户名和密码不能为空！");
+            return result;
+        }
+
+        LoginUser loginUser = loginUserService.selectLoginUser(user_name);
+
+        if (null == loginUser){
+            logger.warn("用户"+user_name+"不存在！");
+            result.setCode(1);
+            result.setMessage("用户不存在，请注册后再登录！");
+            return result;
+        }
+
+        if(!user_pass.equals(loginUser.getUser_pwd())){
+            logger.warn("用户"+user_name+"密码错误！");
+            result.setCode(1);
+            result.setMessage("用户密码错误！");
+            return result;
+        }
+
+        //更新登录时间
+        loginUserService.updateLoginUser(loginUser.getId());
+
+        UserSession userSession = new UserSession();
+        userSession.setId(loginUser.getId());
+        userSession.setUser_name(loginUser.getUser_name());
+
+        request.getSession().setAttribute("user", userSession);
+        request.getSession().setMaxInactiveInterval(Constants.USER_SESSION_MAX_INTERVAL);
+        logger.info("用户"+user_name+"登录成功！");
+
+        result.setCode(0);
+        result.setMessage("登录成功！");
+        return result;
+    }
+
+
+    //人员抽取
     @GetMapping("/personSelect")
-    public String personSelect(ModelMap modelMap) {
+    public String personSelect(HttpServletRequest request,ModelMap modelMap) {
 
+        UserSession userSession = (UserSession) request.getSession().getAttribute("user");
+
+        if(userSession == null){
+            return "redirect:/person/login";
+        }
 
         List<Major> majorList = majorService.selectMajorList();
 
