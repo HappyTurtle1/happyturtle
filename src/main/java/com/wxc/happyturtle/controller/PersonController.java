@@ -16,11 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -95,6 +94,21 @@ public class PersonController {
         result.setCode(0);
         result.setMessage("登录成功！");
         return result;
+    }
+
+    //退出抽取系统登录界面
+    @GetMapping("/person/quit")
+    public String toLogout(HttpServletRequest request) {
+
+        UserSession userSession = (UserSession) request.getSession().getAttribute("user");
+        if (userSession != null) {
+            request.getSession().removeAttribute("user");
+            request.getSession().invalidate();
+        }
+
+        logger.info(IpUtil.getIpAddr(request)+"退出抽取系统。");
+
+        return "web/login";
     }
 
 

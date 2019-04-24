@@ -152,13 +152,17 @@
     </script>
 
 </head>
-<body style="margin: 0;">
+<body style="margin: 0;background-color: #f0f0f0;">
 
     <img src="/img/web-header.png" style="width: 100%"/>
 
     <div style="width: 800px;margin: 0 auto;">
         <div class="htp"></div>
-        <div style="text-align: center;color: #ff6a00;" th:text="'欢迎使用，'+${session.user.user_name}"></div>
+        <div style="text-align: center;color: #ff6a00;">
+            <span th:text="'欢迎使用，'+${session.user.user_name}"></span>
+            <a href="/person/quit" style="margin-left: 10px;" target="_self">注销</a>
+        </div>
+        <div class="htp-sm"></div>
         <div class="htp input-msg"></div>
         <div style="font-size: 24px;">
             <span>项目名称：</span>
